@@ -1,4 +1,4 @@
-Treeherder
+treeherder
 ==================
 [![Build Status](https://travis-ci.org/mozilla/treeherder.png?branch=master)](https://travis-ci.org/mozilla/treeherder)
 [![Python Requirements Status](https://requires.io/github/mozilla/treeherder/requirements.svg?branch=master)](https://requires.io/github/mozilla/treeherder/requirements/?branch=master)

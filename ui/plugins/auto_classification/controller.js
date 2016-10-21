@@ -985,32 +985,10 @@ treeherder.controller('ClassificationPluginCtrl', [
             return 'pending';
         };
 
-        $scope.ignoreClean = function() {
-            /*
-             * Mark all lines that have not got a best classification and
-             * have not been manually altered by a human as "ignore"
-             */
-            _.forEach($scope.pendingLines(),
-                      function(line) {
-                          if (!line.dirty && !line.best) {
-                              // Set the selected option to the ignore option
-                              line.selectedOptionIndex =
-                                  _.findLastIndex(line.options,
-                                                  function(x) {
-                                                      return x.type === "ignore";
-                                                  });
-                              line.selectedOption.always = false;
-                          }
-                      });
-        };
-
         $rootScope.$on(thEvents.saveAllAutoclassifications, function() {
             if ($scope.canSaveAll()) {
                 $scope.saveAll();
             }
-        });
-        $rootScope.$on(thEvents.ignoreOthersAutoclassifications, function() {
-            $scope.ignoreClean();
         });
     }
 ]);

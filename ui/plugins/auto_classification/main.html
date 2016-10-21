@@ -4,11 +4,6 @@
   <div class="failure-lines-actions" ng-if="status() === 'pending'">
     <button ng-if="failureLines"
             class="btn btn-primary btn-sm"
-            title="{{loggedIn() ? 'Ignore items with no autoclassification and nothing explicitly selected': 'Not logged in'}}"
-            ng-disabled="!canIgnore() || !loggedIn()"
-            ng-click="ignoreClean()">Ignore Others</button><br>
-    <button ng-if="failureLines"
-            class="btn btn-primary btn-sm"
             title="{{loggedIn() ? 'Save All' : 'Not logged in'}}"
             ng-disabled="!canSaveAll()"
             ng-click="saveAll()">Save All</button>
@@ -20,33 +15,37 @@
         ng-class="line.type">
       <div class="classification-line-actions">
         <span ng-if="line.status !== 'pending'">
-          <a ng-if="line.status == 'verified' && line.classifiedFailureId"
-             class="label label-xs label-primary"
-             title="This line is verified"
-             target="_blank"
-             ng-href="/failureviewer.html#/?classified_failure_id={{line.classifiedFailureId}}">Verified</a>
+          <div class="classification-activity-text">
+            <a ng-if="line.status == 'verified' && line.classifiedFailureId"
+               class="label label-xs label-primary"
+               title="This line is verified"
+               target="_blank"
+               ng-href="/failureviewer.html#/?classified_failure_id={{line.classifiedFailureId}}">Verified</a>
+          </div>
 
-          <span ng-if="line.status == 'verified' && line.type === 'unstructured'"
-             class="label label-xs label-primary"
-             title="This line is verified">Verified</span>
+          <div ng-if="line.status == 'verified' && line.type === 'unstructured'"
+             class="label label-xs label-primary classification-activity-text"
+             title="This line is verified">Verified</div>
 
-          <span ng-if="line.status == 'ignored'"
-                class="label label-xs label-ignored"
-                title="This line is ignored">Ignored</span>
+          <div ng-if="line.status == 'ignored'"
+                class="label label-xs label-ignored classification-activity-text"
+                title="This line is ignored">Ignored</div>
         </span>
         <span ng-if="line.status === 'pending'">
-          <span ng-if="line.type === 'structured' && line.updateText.length==1">{{line.updateText[0]}}</span>
-          <select
-             ng-if="line.type === 'structured' && line.updateText.length > 1"
-             ng-model="line.updateSelectOption"
-             title="{{loggedIn() ? 'Update selected classifications' : 'Not logged in'}}"
-             ng-disabled="!loggedIn()"
-             ng-options="value for (key, value) in line.updateText"
-             ></select><br>
           <button class="btn btn-xs btn-default"
                   title="{{loggedIn() ? (line.canSave ? 'Select best match' : 'No changes to save') : 'Not logged in'}}"
                   ng-disabled="!loggedIn() || !line.canSave"
                   ng-click="line.save()">Save</button>
+          <div ng-if="line.type === 'structured' && line.updateText.length==1"
+               class="classification-activity-text">{{line.updateText[0]}}</div>
+          <select
+             ng-if="line.type === 'structured' && line.updateText.length > 1"
+             ng-model="line.updateSelectOption"
+             ng-class="{'classification-text-muted': !loggedIn()}"
+             title="{{loggedIn() ? 'Update selected classifications' : 'Not logged in'}}"
+             ng-disabled="!loggedIn()"
+             ng-options="value for (key, value) in line.updateText"
+             ></select><br>
         </span>
       </div>
       <div class="classification-line-detail">
@@ -87,7 +86,7 @@
           {{ ::line.data.search }}
         </div>
         <div ng-if="line.status === 'verified'">
-          <span class="glyphicon glyphicon-star best-classification-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
           <span class="line-option-text" ng-if="line.verifiedBugNumber">
             <a href="{{::getBugUrl(line.verifiedBugNumber) }}"
                target="_blank">Bug {{ ::line.verifiedBugNumber }} -
@@ -129,10 +128,12 @@
                 <span ng-if="option.type == 'classified_failure' && !option.hasBug">
                   Autoclassified failure with no associated bug number
                 </span>
-                <span ng-if="option.type == 'manual'">
+                <span ng-if="option.type == 'manual'"
+                      class="line-option-text"
+                      ng-class="{'classification-text-muted': !loggedIn()}"
+                      title="Enter a different bug number if none suggested or suitable">
                   Other bug <input class="manual-bug-input"
                                    type="text"
-                                   placeholder="Bug Number"
                                    ng-model="option.bugNumber"
                                    ng-change="line.dirty=true"/>
                   <a ng-if="option.bugNumber"
@@ -142,10 +143,12 @@
                 </span>
                 <span ng-if="option.type==='ignore'"
                       class="line-option-text"
+                      ng-class="{'classification-text-muted': !loggedIn()}"
                       title="Ignore this line with regard to job classification"> Ignore line
-                  <select ng-if="line.type == 'structured'"
+                  <select class="ignore-line-dropdown"
+                          ng-if="line.type == 'structured'"
                           ng-model="option.always"
-                          ng-options="key for (key,value) in {'here only': false, 'for future matches': true}">
+                          ng-options="key for (key,value) in {'Here only': false, 'For future matches': true}">
                   </select>
                 </span>
               </label>

@@ -19,6 +19,22 @@ treeherder.factory('thPinboard', [
             if (classification.failure_classification_id > 0) {
                 job.failure_classification_id = classification.failure_classification_id;
 
+                /*
+                var getClassificationText = function (id) {
+                    for (var i = 0; i < thJobClassificationMap.length; i++) {
+                        // console.log("id: " + id + " i: " + i + " text: " + thJobClassificationMap[i].text);
+                        if (id === thJobClassificationMap[i].id) {
+                            // console.log("hit the match");
+                            return thJobClassificationMap[i].text;
+                        }
+                    }
+                };
+
+                job.failure_classification_id = getClassificationText(classification.failure_classification_id);
+                // console.log(classification);
+                console.log(job);
+                */
+
                 // update the unclassified failure count for the page
                 ThResultSetStore.updateUnclassifiedFailureMap($rootScope.repoName, job);
 

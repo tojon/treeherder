@@ -20,6 +20,7 @@ treeherder.factory('thClassificationTypes', [
         var addClassification = function (cl) {
             classifications[cl.id] = {
                 name: cl.name,
+                /// area of interest
                 star: classificationColors[cl.id]
             };
             classificationOptions.push(cl);

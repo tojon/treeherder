@@ -407,21 +407,39 @@ treeherder.factory('thJobFilters', [
          */
         function getFieldFiltersArray() {
             const fieldFilters = [];
+            const clopt = thClassificationTypes.classificationOptions;
 
             _.each($location.search(), function (values, fieldName) {
                 if (_isFieldFilter(fieldName)) {
                     const valArr = _toArray(values);
-                    _.each(valArr, function (val) {
+                    _.each(valArr, function (val, index) {
                         if (fieldName !== QS_SEARCH_STR) {
                             fieldFilters.push({
                                 field: _withoutPrefix(fieldName),
                                 value: val,
                                 key: fieldName
                             });
+                            // Convert classification type int to equivalent string for the UI
+                            if (fieldFilters[index].field === 'failure_classification_id') {
+                                for (var i = 0; i < clopt.length; i++) {
+                                    // console.log(clopt[i]['id']);
+                                    // console.log(clopt[i]['name']);
+                                    // console.log(fieldFilters[0].value);
+                                    if (clopt[i]['id'].toString() === fieldFilters[index].value) {
+                                        // console.log(clopts[i]['name']);
+                                        fieldFilters[index].text = clopt[i]['name'];
+                                    }
+                                }
+                                // console.log(clopts);
+                                // console.log(clopts[2]['name']);
+                            }
                         }
+                        // console.log(fieldFilters[0].value);
+                        // console.log(fieldFilters[0].field);
                     });
                 }
             });
+            // console.log(fieldFilters);
             return fieldFilters;
         }
 
@@ -485,6 +503,7 @@ treeherder.factory('thJobFilters', [
          * object.
          */
         function _getJobFieldValue(job, field) {
+            // area of interest
             if (field === 'platform') {
                 return thPlatformName(job[field]) + " " + job.platform_option;
             } else if (field === 'searchStr') {

@@ -180,6 +180,16 @@ treeherder.value("thDefaultRepo", "mozilla-inbound");
 
 treeherder.value("thDateFormat", "EEE MMM d, H:mm:ss");
 
+treeherder.value("thJobClassificationMap", [
+    { id: 1, text: "not classified" },
+    { id: 2, text: "fixed by commit" },
+    { id: 3, text: "expected fail" },
+    { id: 4, text: "intermittent" },
+    { id: 5, text: "infra" },
+    { id: 6, text: "intermittent needs filing" },
+    { id: 7, text: "autoclassified intermittent" }
+]);
+
 treeherder.value("phCompareDefaultOriginalRepo", "mozilla-central");
 
 treeherder.value("phCompareDefaultNewRepo", "try");
